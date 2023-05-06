@@ -3,19 +3,15 @@
 #import resources
 import sqlite3
 import re
-import tkinter as tk
 
 # create word database with sqlite3 python wrapper
-db_connection = sqlite3.connect('wordle_list.db')
-
-def regexp(pattern, searched_string):
-    return re.fullmatch(pattern,searched_string) is not None
+#db_connection = sqlite3.connect('wordle_list.db')
 
 # make regexp function usable by the database connection and cursor
-db_connection.create_function('regexp', 2, regexp)
+#db_connection.create_function('regexp', 2, regexp)
 
 # create database cursor to execute statements and fetch results
-db_cursor = db_connection.cursor()
+#db_cursor = db_connection.cursor()
 
 ###################################################################
 ###### THE FOLLOWING CODE WAS USED TO INTIALIZE THE DATABASE ######
@@ -47,35 +43,59 @@ db_cursor = db_connection.cursor()
 #################### END OF INITIALIZATION CODE ###################
 ###################################################################
 
+
+def search_wordle_list_db(pattern):
+    # create word database with sqlite3 python wrapper
+    db_connection = sqlite3.connect('wordle_list.db')
+
+    #regexp function used in db query
+    def regexp(pattern, searched_string):
+        return re.fullmatch(pattern,searched_string) is not None
+    
+    # make regexp function usable by the database connection and cursor
+    db_connection.create_function('regexp', 2, regexp)
+
+    # create database cursor to execute statements and fetch results
+    db_cursor = db_connection.cursor()
+
+    # query for words that match pattern
+    matching_words = db_cursor.execute("SELECT * FROM wordle_words WHERE words REGEXP ?", [pattern] )
+
+    # turn query into a list
+    matching_words_list = matching_words.fetchall()
+
+    #close connection to database
+    db_connection.close()
+
+    return matching_words_list
+
+
 letters = 'abcdefghijklmnopqrstuvwxyz'
 letters_list = []
 for letter in letters:
     letters_list.append(letter)
 
-
-# letters in word
-#good_letters = input('What letters are in the word?: ')
-
-#bad_letters = input('What are the letters not in the word?: ')
-
-good_letters = 'dodge'
-bad_letters = 'z'
+bad_letters = 'aieuthrnmb'
 
 
 for letter in bad_letters:
     letters_list.remove(letter)
+
 possible_letters = ''
-
-
 for letter in letters_list:
     possible_letters = possible_letters + letter
 
-pattern = 'aa(h|r|p)[a-z][a-z]'
-#pattern = re.complie(r'(aa)|(ll)[a-z][a-z][a-z]')
-#pattern = '[{good_letters}]|[{possible_letters}][{possible_letters}]|[{possible_letters}][{good_letters}]|[{possible_letters}][{good_letters}]|[{possible_letters}][{good_letters}]|[{possible_letters}]'.format(good_letters = good_letters, possible_letters=bad_letters)
-matching_words = db_cursor.execute("SELECT * FROM wordle_words WHERE words REGEXP ?", [pattern] )
 
+pos1 = 'd'
+pos2 = '[' + possible_letters + ']'
+pos3 = '[' + possible_letters + ']'
+pos4 = '[' + possible_letters + ']'
+pos5 = '[' + possible_letters + ']'
 
-#matching_words = db_cursor.execute("SELECT * FROM wordle_words WHERE words REGEXP ?", [r'[dodge][dodge][dodge][dodge][dodge]'] )
-print(matching_words.fetchall())
+pattern = pos1 + pos2 + pos3 + pos4 + pos5
 
+matches = search_wordle_list_db(pattern)
+print(matches)
+for match in matches:
+    if 'o' in match:
+        print(match)
