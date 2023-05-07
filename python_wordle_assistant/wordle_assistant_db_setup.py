@@ -70,32 +70,33 @@ def search_wordle_list_db(pattern):
     return matching_words_list
 
 
-letters = 'abcdefghijklmnopqrstuvwxyz'
-letters_list = []
-for letter in letters:
-    letters_list.append(letter)
+if __name__ == '__main__':
 
-bad_letters = 'aieuthrnmb'
+    letters = 'abcdefghijklmnopqrstuvwxyz'
+    letters_list = []
+    for letter in letters:
+        letters_list.append(letter)
 
-
-for letter in bad_letters:
-    letters_list.remove(letter)
-
-possible_letters = ''
-for letter in letters_list:
-    possible_letters = possible_letters + letter
+    bad_letters = 'aieuthrnmb'
 
 
-pos1 = 'd'
-pos2 = '[' + possible_letters + ']'
-pos3 = '[' + possible_letters + ']'
-pos4 = '[' + possible_letters + ']'
-pos5 = '[' + possible_letters + ']'
+    for letter in bad_letters:
+        letters_list.remove(letter)
 
-pattern = pos1 + pos2 + pos3 + pos4 + pos5
+    possible_letters = ''
+    for letter in letters_list:
+        possible_letters = possible_letters + letter
 
-matches = search_wordle_list_db(pattern)
-print(matches)
-for match in matches:
-    if 'o' in match:
-        print(match)
+
+    pos1 = 'd'
+    pos2 = '[' + possible_letters + ']'
+    pos3 = '[' + possible_letters + ']'
+    pos4 = '[' + possible_letters + ']'
+    pos5 = '[' + possible_letters + ']'
+
+    pattern = pos1 + pos2 + pos3 + pos4 + pos5
+
+    matches = search_wordle_list_db(pattern)
+    for match in matches:
+        if 'o' in match[0]:
+            print(match[0])
