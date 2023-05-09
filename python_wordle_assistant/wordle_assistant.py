@@ -29,11 +29,12 @@ class WordleAssistant:
                     parent.check_boxes[(entry, row)].grid(row=row,column=entry,padx=10)
         
         def generate_guesses(self):
-            letters = 'abcdefghijklmnopqrstuvwxyz'
-            letters_list = []
+            letters = 'abcdefghijklmnopqrstuvwxyz' # all possible lowercase letters
+            letters_list = [] # list to hold all possible lowercase letters
             for letter in letters:
                 letters_list.append(letter)
 
+            # strings that will represent the regex patterns for each letter position
             positions = {
                 1: '',
                 2: '',
@@ -42,25 +43,62 @@ class WordleAssistant:
                 5: ''
             }
 
+            # look at correct letter entries; if a letter is placed that letter becomes the position specific regex pattern
             for (key, value) in self.correct_letters_frame.entry_widgets_values.items():
                 if value.get() != '':
                     positions[key] = value.get()
             
+            # look at letters in incorrect letter entries; remove these letters from letter_list
             for letter in self.incorrect_letters_entry_value.get():
                 if letter in letters_list:
                     letters_list.remove(letter)
             
-            possible_letters = ''
-            for letter in letters_list:
-                possible_letters = possible_letters + letter
+            # create a dictionary to hold position specific list of possible letters 
+            # (like positions but a dictionary of lists instead of a dictionary of strings)
+            position_letters_list = {num:[] for num in positions.keys()}
+            for position in position_letters_list.keys():
+                for letter in letters_list:
+                    position_letters_list[position].append(letter)
 
-            possible_letters = '[' + possible_letters + ']'
+            # create a list to hold postive look-ahead assertion (make sure misplaced letters are in word)
+            positive_look_ahead_assertions = []
+
+            # loop through misplaced letter entry values (goal is to remove misplaced letters from position lists they don't belong in)
+            for (key,value) in self.misplaced_letters_frame.entry_widgets_values.items():
+                if value.get() != '': # determine if a specific entry is empty or not
+                    entry_value_letter = value.get() # extract misplaced letter value
+                    positive_look_ahead_assertions.append('(?=.*{letter}.*)'.format(letter=entry_value_letter))
+                    # loop through checkboxes to determine in which position lists to eliminate the letter
+                    for (checkbutton,value) in self.misplaced_letters_frame.check_boxes_values.items():
+                        if (checkbutton[0] == key) and (value.get() == True): # make sure checkbox is in the correct column
+                            print(checkbutton)
+                            if entry_value_letter in position_letters_list[checkbutton[1]]: # determine if letter is in position associated list
+                                print(type(position_letters_list[checkbutton[1]]))
+                                position_letters_list[checkbutton[1]].remove(entry_value_letter)
+                                
+
+            # define dictionary to hold regex string for each letter position
+            possible_letters_strings = {}
+            # loop through each list in position_letters_list dictionary
+            for (num,letter_list) in position_letters_list.items():
+                # following code puts all possible letters for a position in a character class
+                possible_letters_strings[num] = '['
+                for letter in letter_list:
+                    possible_letters_strings[num] = possible_letters_strings[num] + letter
+                possible_letters_strings[num] = possible_letters_strings[num] + ']'
             
+            # if correct letter isn't known for a position -> place appropriate regex expression as value
             for (key, value) in positions.items():
                 if value == '':
-                    positions[key] = possible_letters
+                    positions[key] = possible_letters_strings[key]
             
+            #sum up regex expressions (as assigned in positions dictionary) into a single string
             pattern = positions[1] + positions[2] + positions[3] + positions[4] + positions[5]
+
+            # put positive look ahead assertions at beggining of regex pattern
+            for assertion in positive_look_ahead_assertions:
+                pattern = assertion + pattern
+
             print(pattern)
             word_list_tuples = search_wordle_list_db(pattern)
 

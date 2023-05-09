@@ -77,7 +77,7 @@ if __name__ == '__main__':
     for letter in letters:
         letters_list.append(letter)
 
-    bad_letters = 'aieuthrnmb'
+    bad_letters = 'sltedringpybu'
 
 
     for letter in bad_letters:
@@ -88,9 +88,9 @@ if __name__ == '__main__':
         possible_letters = possible_letters + letter
 
 
-    pos1 = 'd'
-    pos2 = '[' + possible_letters + ']'
-    pos3 = '[' + possible_letters + ']'
+    pos1 = '(?!a)[' + possible_letters + ']'
+    pos2 = '(?!a)[' + possible_letters + ']'
+    pos3 = '(?!a)[' + possible_letters + ']'
     pos4 = '[' + possible_letters + ']'
     pos5 = '[' + possible_letters + ']'
 
@@ -98,5 +98,5 @@ if __name__ == '__main__':
 
     matches = search_wordle_list_db(pattern)
     for match in matches:
-        if 'o' in match[0]:
+        if ('a' in match[0]) and ('o' in match[0]):
             print(match[0])
