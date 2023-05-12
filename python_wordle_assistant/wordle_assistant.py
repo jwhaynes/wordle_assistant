@@ -11,12 +11,17 @@ class WordleAssistant:
     
     def __init__(self, parent):
 
+        def check_entry(newval):
+            return re.match(r'^[a-z]|\s*$', newval) is not None and len(newval) <= 1
+        
+        check_entry_wrapper = (parent.register(check_entry), '%P')
+
         def make_entry_widgets(parent):
             parent.entry_widgets = {}
             parent.entry_widgets_values = {}
             for num in range(1,6):
                 parent.entry_widgets_values[num] = StringVar('')
-                parent.entry_widgets[num] = ttk.Entry(parent,width=2,font=56, textvariable=parent.entry_widgets_values[num])
+                parent.entry_widgets[num] = ttk.Entry(parent,width=2,font=56, textvariable=parent.entry_widgets_values[num], validate='key', validatecommand=check_entry_wrapper)
                 parent.entry_widgets[num].grid(row=0,column=num, padx=10)
 
         def make_check_boxes(parent):
@@ -71,9 +76,7 @@ class WordleAssistant:
                     # loop through checkboxes to determine in which position lists to eliminate the letter
                     for (checkbutton,value) in self.misplaced_letters_frame.check_boxes_values.items():
                         if (checkbutton[0] == key) and (value.get() == True): # make sure checkbox is in the correct column
-                            print(checkbutton)
                             if entry_value_letter in position_letters_list[checkbutton[1]]: # determine if letter is in position associated list
-                                print(type(position_letters_list[checkbutton[1]]))
                                 position_letters_list[checkbutton[1]].remove(entry_value_letter)
                                 
 
@@ -99,7 +102,6 @@ class WordleAssistant:
             for assertion in positive_look_ahead_assertions:
                 pattern = assertion + pattern
 
-            print(pattern)
             word_list_tuples = search_wordle_list_db(pattern)
 
             word_guesses_list = []
@@ -158,6 +160,9 @@ class WordleAssistant:
         self.listbox_words = StringVar(value=self.word_list)
         self.guesses_list = Listbox(self.content_frame, height=15, listvariable=self.listbox_words)
         self.guesses_list.grid(row=1,column=1, rowspan=3)
+        self.listbox_scroll = ttk.Scrollbar(self.content_frame, orient=VERTICAL, command=self.guesses_list.yview)
+        self.listbox_scroll.grid(row=1,column=2, rowspan=3, sticky=(N,S))
+        self.guesses_list.configure(yscrollcommand=self.listbox_scroll.set)
     
     
 
