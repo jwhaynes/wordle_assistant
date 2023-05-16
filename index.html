@@ -4,30 +4,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>HTML 5 Boilerplate</title>
+    <title>Wordle Assistant</title>
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <header>
-        <h1>Wordle Assistant</h1>
+      <h1>Wordle Assistant</h1>
     </header>
-    <section>
-        <div>
+    <section class="flex-row">
+        <div class="content-container">
+          <div class="bordered-input">
             <h3>Correct Letters</h3>
             <p>These boxes are for placing correct letters. If you know a letter goes with a box
-                 you can put it there or leave the box empty.</p>
-        </div>
-        <div>
+                  you can put it there or leave the box empty.</p>
+            <div class="flex-row">
+              <div class="flex-column">
+                <h6>Letter 1</h6>
+                <input type="text" class="letter-box" id="correct-letter-1">
+              </div>
+              <div class="flex-column">
+                <h6>Letter 2</h6>
+                <input type="text" class="letter-box" id="correct-letter-2">
+              </div>
+              <div class="flex-column">
+                <h6>Letter 3</h6>
+                <input type="text" class="letter-box" id="correct-letter-3">
+              </div>
+              <div class="flex-column">
+                <h6>Letter 4</h6>
+                <input type="text" class="letter-box" id="correct-letter-4">
+              </div>
+              <div class="flex-column">
+                <h6>Letter 5</h6>
+                <input type="text" class="letter-box" id="correct-letter-5">
+              </div>
+            </div>
+          </div>
+          <div class="bordered-input">
             <h3>Misplaced Letters</h3>
             <p>These boxes are for letters with unknown position. 
                 After putting a letter in the box, indicate any positions it does not belong in.
             </p>
-        </div>
-        <div>
+            <div class="flex-row">
+              <div class="flex-column">
+                <h6>Letter 1</h6>
+                <input type="text" class="letter-box" id="misplaced-letter-1">
+              </div>
+              <div class="flex-column">
+                <h6>Letter 2</h6>
+                <input type="text" class="letter-box" id="misplaced-letter-2">
+                <div class="flex-row" class="check-box-row">
+                  <input type="checkbox" id="misplaced-letter-2-1" name="misplaced-letter-2-1">
+                  <label for="misplaced-letter-2-1">Not 1<su>st</su> letter</label>
+                </div>
+              </div>
+              <div class="flex-column">
+                <h6>Letter 3</h6>
+                <input type="text" class="letter-box" id="misplaced-letter-3">
+              </div>
+              <div class="flex-column">
+                <h6>Letter 4</h6>
+                <input type="text" class="letter-box" id="misplaced-letter-4">
+              </div>
+              <div class="flex-column">
+                <h6>Letter 5</h6>
+                <input type="text" class="letter-box" id="misplaced-letter-5">
+              </div>
+            </div>
+          </div>
+          <div class="bordered-input">
             <h3>Wrong Letters</h3>
             <p>These are letters that are not part of the word.</p>
+            <div class="flex-row">
+              <input type="text" id="wrong-letters">
+            </div>
+          </div>
+          <button id="generate-button">Generate Guesses</button>
+        </div>
+        <div class="content-container">
+          <div class="flex-column">
+            <h3>Guesses</h3>
+            <div id="guesses-box">Guess 1<br>Guess 2</div>
+          </div>
         </div>
     </section>
-	<script src=""></script>
+	<script>
+  const letterBoxes = document.getElementsByClassName("letter-box");
+  for (letterBox of letterBoxes) {
+    letterBox.setAttribute("size", 2)
+    letterBox.setAttribute("maxlength", 1)
+  }
+  </script>
   </body>
 </html>
