@@ -82,7 +82,18 @@ class WordleAssistant:
             for (key,value) in self.misplaced_letters_frame.entry_widgets_values.items():
                 if value.get() != '': # determine if a specific entry is empty or not
                     entry_value_letter = value.get() # extract misplaced letter value
-                    positive_look_ahead_assertions.append('(?=.*{letter}.*)'.format(letter=entry_value_letter)) # create a positive look ahead assertion for misplaced letter
+                    # determine if misplaced letter is the same as a correct letter
+                    entry_value_letter_instances_as_correct_letter = 0 # assume at start misplaced letter is not like any correct letter
+                    for val in positions.values():
+                        if val == entry_value_letter:
+                            entry_value_letter_instances_as_correct_letter += 1 # if misplaced letter equivalent to correct letter, increment variable
+                    # the following control flow creates positive look ahead based on number of correct letters that are the same as misplaced letter
+                    if entry_value_letter_instances_as_correct_letter == 0:
+                        positive_look_ahead_assertions.append('(?=.*{letter}.*)'.format(letter=entry_value_letter)) # create a positive look ahead assertion for misplaced letter
+                    elif entry_value_letter_instances_as_correct_letter == 1:
+                        positive_look_ahead_assertions.append('(?=.*{letter}.*{letter}.*)'.format(letter=entry_value_letter)) # create a positive look ahead assertion for misplaced letter
+                    elif entry_value_letter_instances_as_correct_letter == 2:
+                        positive_look_ahead_assertions.append('(?=.*{letter}.*{letter}.*{letter}.*)'.format(letter=entry_value_letter)) # create a positive look ahead assertion for misplaced letter
                     # loop through checkboxes to determine in which position lists to eliminate the letter
                     for (checkbutton,value) in self.misplaced_letters_frame.check_boxes_values.items():
                         if (checkbutton[0] == key) and (value.get() == True): # make sure checkbox is in the correct column

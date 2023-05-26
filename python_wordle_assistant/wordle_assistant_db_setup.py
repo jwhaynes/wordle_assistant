@@ -94,9 +94,10 @@ if __name__ == '__main__':
     pos4 = '[' + possible_letters + ']'
     pos5 = '[' + possible_letters + ']'
 
-    pattern = pos1 + pos2 + pos3 + pos4 + pos5
+    #pattern = pos1 + pos2 + pos3 + pos4 + pos5
+
+    pattern = r'(?=.*o.*){2}[a-z][a-z][a-z][a-z][o]'
 
     matches = search_wordle_list_db(pattern)
     for match in matches:
-        if ('a' in match[0]) and ('o' in match[0]):
-            print(match[0])
+        print(match)
