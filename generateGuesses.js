@@ -1,6 +1,7 @@
 function generateGuesses () {
     // main function for generating guess words
 
+    //Following block of variable delcarations are all the return values of functions defined later in this file
     const correctLetterValues = getCorrectLetterValues();
     const misplacedLetterValues = getMisplacedLetterValues();
     const wrongLetterValues = getWrongLetterValues();
@@ -10,11 +11,20 @@ function generateGuesses () {
     const refinedLetterPossibilitiesForWord = removeMisplacedLetters(letterPossibilitiesForWord, misplacedLetterValues, misplacedLetterIncorrectLetterPositionsValues);
     const regexExpression = createFinalRegexExpression(refinedLetterPossibilitiesForWord,misplacedLetterValues);
 
+    // define text file name to be fetched
+    const url = 'wordle-nyt-words-14855.txt';
 
-
-    const guessesBox = document.getElementById('guesses-box');
-    guessesBox.innerHTML = regexExpression;
-    console.log(regexExpression)
+    // fetch text file in promise format
+    fetch(url).then((response) => {
+        if (!response.ok) {
+        console.log('error detected'); // log to console if an error
+        }
+        return response.text(); // return text if no error
+    }).then((text) => {
+        displayMatches(text, regexExpression) // call final function for dispalying matches (function delcaration below)
+    }).catch((error) => {
+        console.log('Error!');
+    })
 }
 
 function getCorrectLetterValues () {
@@ -244,4 +254,27 @@ function createFinalRegexExpression (letterPosPossibiles, misplacedVals) {
     finalRegexExpression = finalRegexExpression + addedPossiblities;
 
     return finalRegexExpression;
+}
+
+function displayMatches(textForMatching, regexpExpression) {
+    // function for generating matches to regexp expression and displaying those matchesin the guess box
+    // textForMatching is a string that is output from the fetch call in the generateGuesses function
+    // regexpExpression is a string that is output from the createFinalRegexExpression function
+
+    // create array variable to hold all the matches of the expression within the string
+    let viableGuessesArray = Array.from(textForMatching.matchAll(regexpExpression));
+    
+    // initialize a string variable to hold the final display value
+    let viableGuessesString = '';
+
+    // loop through each word of the viable guesses array
+    for (let word of viableGuessesArray) {
+        // add each word to viableGuessesString and a break tag following it
+        viableGuessesString = viableGuessesString + word + '<br>';
+    }
+    
+    // capture guessbox element
+    const guessesBox = document.getElementById('guesses-box');
+    // assign matching words to innerHTML property of guessbox
+    guessesBox.innerHTML = viableGuessesString;
 }
