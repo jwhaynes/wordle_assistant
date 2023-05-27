@@ -41,7 +41,7 @@
 
 .content-container {
     display: block;
-    margin-bottom: 5%;
+    margin-bottom: 0vh;
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -51,29 +51,47 @@
     border: solid 1px black;
     border-radius: 5px;
     padding: 1vw;
-    margin: 1vw;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    margin-left: 1vw;
+    margin-right: 1vw;
 }
 
-h1,h2,h3,h4,h5,h6,p {
+h1,h2,h3,h4,h5,h6 {
     text-align: center;
+}
+
+p {
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 0vh;
+    margin-top: 1vh;
+}
+
+h3, p {
+    margin-top: 1vh;
+    margin-bottom: 1vh;
 }
 
 header {
     border-style: hidden hidden dotted hidden;
     border-bottom: solid 3px grey;
-    margin-bottom: 3vh;
+    margin-bottom: 0vh;
 }
 
 #guesses-box {
     border: solid 1px black;
     margin-left: 3vw;
     margin-right: 3vw;
-    height: 90vh;
+    height: 74vh;
     width: 10vw;
     border-radius: 5px;
     padding: 10px;
     overflow-wrap: break-word;
     hyphens: auto;
+    overflow-y: scroll;
 }
 
 #generate-button {
