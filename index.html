@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
+    <script src="./generateGuesses.js"></script>
 
     <header>
       <h1>Wordle Assistant</h1>
@@ -114,7 +115,7 @@
 
           </div>
 
-          <button id="generate-button">Generate Guesses</button>
+          <button id="generate-button" onclick="generateGuesses()">Generate Guesses</button>
 
         </div>
 
@@ -122,7 +123,7 @@
 
           <div class="flex-column">
             <h3>Guesses</h3>
-            <div id="guesses-box">Welcome to Wordle Assistant :)</div>
+            <div id="guesses-box">Welcome to Wordle Assistant</div>
           </div>
 
         </div>
@@ -133,7 +134,7 @@
 
   const letterBoxes = document.getElementsByClassName("letter-box");
   
-  for (letterBox of letterBoxes) {
+  for (let letterBox of letterBoxes) {
     letterBox.setAttribute("size", 2);
     letterBox.setAttribute("maxlength", 1);
     letterBox.setAttribute("pattern", "[a-z]|/s"); // this doesn't seem to limit input to lower case letters
@@ -141,9 +142,8 @@
 
   const checkBoxCols = document.getElementsByClassName("check-box-col");
   
-  for (checkBoxCol of checkBoxCols) {
+  for (let checkBoxCol of checkBoxCols) {
     let col = checkBoxCol.id[checkBoxCol.id.length-1];
-    console.log(checkBoxCol);
 
     let colTitle = document.createElement("h6");
     colTitle.innerHTML = "Not letter:";
