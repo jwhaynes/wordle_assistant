@@ -83,10 +83,10 @@ header {
 
 #guesses-box {
     border: solid 1px black;
-    margin-left: 3vw;
-    margin-right: 3vw;
+    margin-left: 1vw;
+    margin-right: 1vw;
     height: 74vh;
-    width: 10vw;
+    width: 7ch;
     border-radius: 5px;
     padding: 10px;
     overflow-wrap: break-word;
