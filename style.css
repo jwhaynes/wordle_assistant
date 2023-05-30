@@ -86,7 +86,7 @@ header {
     margin-left: 1vw;
     margin-right: 1vw;
     height: 74vh;
-    width: 7ch;
+    min-width: 7ch;
     border-radius: 5px;
     padding: 10px;
     overflow-wrap: break-word;
